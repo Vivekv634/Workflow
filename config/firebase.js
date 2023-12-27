@@ -1,17 +1,17 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
-import {getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: process.env.DB_API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGE_SENDER_ID,
-    appId: process.env.APP_ID,
-    measurementId:process.env.MEASUREMENT_ID,
+    apiKey: "AIzaSyC-q6pTa2lST7G1g8KGshrGja2EFzDlJM0",
+    authDomain: "workflow-9f4ff.firebaseapp.com",
+    projectId: "workflow-9f4ff",
+    storageBucket: "workflow-9f4ff.appspot.com",
+    messagingSenderId: "479413635993",
+    appId: "1:479413635993:web:7ee27390ee697ad03be108",
+    measurementId: "G-1NWFSCR34F"
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
