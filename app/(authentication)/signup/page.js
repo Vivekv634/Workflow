@@ -46,7 +46,7 @@ const Signup = () => {
       return;
     }
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       const userData = {
         name: name,
         email: email,
