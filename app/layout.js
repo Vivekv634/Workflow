@@ -1,7 +1,6 @@
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { NextAuthProvider } from './provider'
-import Navbar from '@/components/Navbar'
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { NextAuthProvider } from './provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,7 +14,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning={true} className={`${inter.className} *:p-0 *:m-0 *:box-border`}>
         <NextAuthProvider>
-          <Navbar />
           {children}
         </NextAuthProvider>
       </body>

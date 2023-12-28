@@ -2,6 +2,7 @@
 import { auth } from "@/config/firebase";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
 
@@ -11,6 +12,7 @@ export default function Home() {
   }
   return (
     <main>
+      <Navbar />
       Hello World
       <br />
       <button type="button" onClick={() => handleSignout()}>Sign out</button>
