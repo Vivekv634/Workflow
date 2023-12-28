@@ -13,13 +13,7 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      Hello World
-      <br />
       <button type="button" onClick={() => handleSignout()}>Sign out</button>
-      <br />
-      <Link href="/signup">Sign up</Link>
-      <br />
-      <Link href="/login">Login</Link>
     </main>
   )
 }

@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { getDocs, query, where } from 'firebase/firestore';
 import Page from '@/app/components/Page';
 import Navbar from '../components/Navbar';
+import AddPage from '../components/AddPage';
+import Loading from '../components/Loading';
 const Dashboard = () => {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,9 +30,10 @@ const Dashboard = () => {
 
   return (<main>
     <Navbar />
-    <div></div>
+    {loading && <Loading />}
+    {!loading && <AddPage />}
     {
-      loading ? "Loading..." : pages.map((page) => {
+      !loading && pages.map((page) => {
         return <Page pid={page.pid} key={page.pid} pname={page.pname} timestamp={page.timestamp} />
       })
     }
