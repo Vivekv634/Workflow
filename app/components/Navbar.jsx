@@ -23,9 +23,9 @@ const Navbar = () => {
     })
     return (
         <header className=''>
-            <nav className='relative w-full bg-blue-800 h-[10vh] flex p-5 m-auto justify-between text-center items-center text-white'>
-                <div className="text-xl"><Link href='/'>Workflow</Link></div>
-                <ul className={`${navbar ? 'opacity-100' : 'opacity-0'} z-10 absolute top-[5rem] bg-yellow-500 w-full md:opacity-100 md:flex md:static md:w-fit md:bg-transparent`}>
+            <nav className='relative w-full bg-blue-800 h-[10vh] flex m-auto justify-between text-center items-center text-white'>
+                <div className="text-xl pl-5"><Link href='/'>Workflow</Link></div>
+                <ul className={`${navbar ? 'block' : 'hidden'} z-50 absolute top-[10vh] bg-yellow-500 w-full  md:flex md:static md:w-fit md:bg-transparent`}>
                     {!isAuth && <li className='flex flex-col p-6'>
                         <Link onClick={() => { handleNavbar() }} href='/signup'>Sign Up</Link>
                     </li>}

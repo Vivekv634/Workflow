@@ -23,8 +23,8 @@ const Login = () => {
   return (
     <main>
       <form>
-        <input type="email" placeholder='Email Address' value={email} onChange={(e) => (setEmail(e.target.value))} required={required} />
-        <input type="password" placeholder='Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} />
+        <input className='input' type="email" placeholder='Email Address' value={email} onChange={(e) => (setEmail(e.target.value))} required={required} />
+        <input className='input' type="password" placeholder='Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} />
         <input type="submit" value="Submit" onClick={handleSubmit} />
       </form>
     </main>

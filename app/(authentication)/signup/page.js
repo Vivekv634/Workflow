@@ -97,14 +97,15 @@ const Signup = () => {
 
   return (
     <main>
-      {isAuth && <form>
-        <Image src={photoURL} height={40} width={40} alt='profile photo' />
-        <input type="text" placeholder='Name' value={name} onChange={(e) => (setName(e.target.value))} required={required} />
-        <input type="email" placeholder='Email Address' value={email} onChange={(e) => (setEmail(e.target.value))} required={required} />
-        <input type="password" placeholder='New Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} />
-        <input type="password" placeholder='Confirm New Password' value={cpassword} onChange={(e) => (setCPassword(e.target.value))} required={required} />
-        <input type="submit" value="Submit" onClick={handleFormSubmit} />
-      </form>}
+      {isAuth &&
+        <form>
+          <Image src={photoURL} height={40} width={40} alt='profile photo' />
+          <input className='input' type="text" placeholder='Name' value={name} onChange={(e) => (setName(e.target.value))} required={required} />
+          <input className='input' type="email" placeholder='Email Address' value={email} onChange={(e) => (setEmail(e.target.value))} required={required} />
+          <input className='input' type="password" placeholder='New Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} />
+          <input className='input' type="password" placeholder='Confirm New Password' value={cpassword} onChange={(e) => (setCPassword(e.target.value))} required={required} />
+          <input type="submit" value="Submit" onClick={handleFormSubmit} />
+        </form>}
       {!isAuth && <button type="button" onClick={() => signIn('google')}>Sigup with google</button>}
     </main>
   )
