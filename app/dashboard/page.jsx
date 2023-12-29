@@ -3,7 +3,7 @@ import { auth, db, workflow } from '@/config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { getDocs, query, where, updateDoc, arrayUnion, doc, collection, Firestore } from 'firebase/firestore';
+import { getDocs, query, where, updateDoc, arrayUnion, doc } from 'firebase/firestore';
 import Page from '@/app/components/Page';
 import Navbar from '../components/Navbar';
 import Loading from '../components/Loading';
@@ -17,19 +17,21 @@ const Dashboard = () => {
   const [id, setId] = useState('');
   const router = useRouter();
 
-  const handlePageSubmit = async (e) => {
-    e.preventDefault();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        getDocs(workflow).then((response) => {
-          response.docs.map(item => {
-            if (item.data().email == user.email) {
-              setId(item.id);
-            }
-          })
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      getDocs(workflow).then((response) => {
+        response.docs.map(item => {
+          if (item.data().email == user.email) {
+            setId(item.id);
+          }
         })
-      }
-    })
+      })
+    }
+  })
+  
+  const handlePageSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
     const docRef = doc(db, "workflow", id);
     await updateDoc(docRef, {
       pages: arrayUnion(
@@ -64,13 +66,12 @@ const Dashboard = () => {
         }
       )
     }).then(() => {
-      console.log("updated")
-      alert("Reload the page to see the new page")
+      setPopup(!popup)
+      window.location.reload();
     }).catch(err =>
       console.error(err.message))
+    setLoading(false);
   }
-
-
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -100,7 +101,7 @@ const Dashboard = () => {
               <form className='my-2'>
                 <input type="text" autoFocus placeholder='Page Name' value={pageName} onChange={(e) => { setPageName(e.target.value) }} className='input w-full' /><br />
                 <div>
-                  <input className='block p-2 bg-blue-600 w-full text-white rounded-md my-3 hover:bg-blue-700 cursor-pointer' type="submit" value="Double Click to Create Page" onClick={handlePageSubmit} />
+                  <input className='block p-2 bg-blue-600 w-full text-white rounded-md my-3 hover:bg-blue-700 cursor-pointer' type="submit" value="Create Page" onClick={handlePageSubmit} />
                   <button className='p-2 my-2 border-2 border-blue-600 rounded-md w-full text-blue-600' type="button" onClick={() => setPopup(!popup)}>Cancel</button>
                 </div>
               </form>
