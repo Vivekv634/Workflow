@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import SettingSVG from '@/public/gear.svg';
+import SettingPNG from '@/public/menu.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -67,7 +67,6 @@ const Page = (props) => {
         } catch (error) {
             console.error(error);
         }
-
     }
 
     return (
@@ -83,15 +82,15 @@ const Page = (props) => {
             </div>
             <div className='w-1/12 h-full flex items-start justify-end'>
                 <div>
-                    <Image src={SettingSVG} width={30} height={30} alt='project settings' className='cursor-pointer'
+                    <Image src={SettingPNG} width={20} height={20} alt='project settings' className='cursor-pointer'
                         onClick={() => setPopup(!popup)} />
                 </div>
-                <ul className={`absolute ${popup ? 'block' : 'hidden'}  bg-white p-1 mt-9 w-36 border rounded-lg`}>
-                    <li className='hover:bg-slate-100 px-1 py-[2px] rounded-md cursor-pointer' 
+                <ul className={`absolute ${popup ? 'block' : 'hidden'}  bg-slate-50 p-1 mt-9 w-36 border rounded-lg`}>
+                    <li className='hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' 
                     onClick={() => handlePageRedirect()}>Open Page</li>
-                    <li className='hover:bg-slate-100 px-1 py-[2px] rounded-md cursor-pointer' 
+                    <li className='hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' 
                     onClick={() => { setDisable(false), setPopup(!popup), setFocus(true) }}>Rename</li>
-                    <li className='text-red-600 hover:bg-slate-100 px-1 py-[2px] rounded-md cursor-pointer'
+                    <li className='text-red-600 hover:bg-slate-100 p-[4px] rounded-md cursor-pointer'
                         onClick={() => { handleDeletePage(props.pid) }}>Delete</li>
                 </ul>
             </div>

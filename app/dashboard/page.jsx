@@ -41,29 +41,8 @@ const Dashboard = () => {
           pname: pageName,
           timestamp: Date(),
           update_timestamp: Date(),
-          nodes: [
-            {
-              id: '1',
-              data: { label: 'Hello' },
-              position: { x: 0, y: 0 },
-              type: 'input'
-            },
-            {
-              id: '2',
-              data: { label: 'World' },
-              position: { x: 100, y: 100 },
-              type: 'output'
-            }
-          ],
-          edges: [
-            {
-              id: "1-2",
-              type: "",
-              label: "",
-              source: "1",
-              target: "2"
-            }
-          ]
+          nodes: [],
+          edges: []
         }
       )
     }).then(() => {
