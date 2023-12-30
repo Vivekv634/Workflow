@@ -106,7 +106,8 @@ const Signup = () => {
           <input className='input' type="password" placeholder='Confirm New Password' value={cpassword} onChange={(e) => (setCPassword(e.target.value))} required={required} />
           <input type="submit" value="Submit" onClick={handleFormSubmit} />
         </form>}
-      {!isAuth && <button type="button" onClick={() => signIn('google')}>Sigup with google</button>}
+      {!isAuth && <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={() => signIn('google')}>Sigup with google</button>} <br />
+      {!isAuth && <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={() => signIn('github')}>Sigup with github</button>}
     </main>
   )
 }

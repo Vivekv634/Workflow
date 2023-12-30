@@ -18,7 +18,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    console.log(user)
   }
   return (
     <main>

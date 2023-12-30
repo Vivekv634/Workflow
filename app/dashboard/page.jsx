@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [popup, setPopup] = useState(false);
   const [pageName, setPageName] = useState('');
   const [id, setId] = useState('');
+  const [hideClose, setHideClose] = useState(true);
   const router = useRouter();
 
   onAuthStateChanged(auth, (user) => {
@@ -99,7 +100,7 @@ const Dashboard = () => {
             <section className='w-10/12 md:w-7/12 lg:w-1/2 flex flex-col justify-evenly'>
               <h2 className='text-[1.5rem] md:text-3xl mx-auto my-2 text-blue-900 font-bold'>Create a New Page</h2>
               <form className='my-2'>
-                <input type="text" autoFocus placeholder='Page Name' value={pageName} onChange={(e) => { setPageName(e.target.value) }} className='input w-full' /><br />
+                <input type="text" autoFocus={true} placeholder='Page Name' value={pageName} onChange={(e) => { setPageName(e.target.value) }} className='input w-full outline' /><br />
                 <div>
                   <input className='block p-2 bg-blue-600 w-full text-white rounded-md my-3 hover:bg-blue-700 cursor-pointer' type="submit" value="Create Page" onClick={handlePageSubmit} />
                   <button className='p-2 my-2 border-2 border-blue-600 rounded-md w-full text-blue-600' type="button" onClick={() => setPopup(!popup)}>Cancel</button>
@@ -118,7 +119,7 @@ const Dashboard = () => {
         }
         {
           !loading && pages.map((page) => {
-            return <Page pid={page.pid} key={page.pid} pname={page.pname} timestamp={page.timestamp} />
+            return <Page pid={page.pid} key={page.pid} pname={page.pname} timestamp={page.timestamp} hideClose={hideClose} />
           })
         }
       </main>
