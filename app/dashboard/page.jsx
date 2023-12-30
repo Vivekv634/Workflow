@@ -15,7 +15,6 @@ const Dashboard = () => {
   const [popup, setPopup] = useState(false);
   const [pageName, setPageName] = useState('');
   const [id, setId] = useState('');
-  const [hideClose, setHideClose] = useState(true);
   const router = useRouter();
 
   onAuthStateChanged(auth, (user) => {
@@ -98,7 +97,7 @@ const Dashboard = () => {
         }
         {
           !loading && pages.map((page) => {
-            return <Page pid={page.pid} key={page.pid} pname={page.pname} timestamp={page.timestamp} hideClose={hideClose} />
+            return <Page pid={page.pid} key={page.pid} pname={page.pname} timestamp={page.timestamp} />
           })
         }
       </main>
