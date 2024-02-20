@@ -6,4 +6,7 @@
     .input {
         @apply p-2 my-2 rounded-md outline-none border;
     }
+    .pageBottomButtonCSS{
+        @apply p-2 w-full flex justify-center hover:bg-blue-400 transition rounded-md cursor-pointer;
+    }
 }

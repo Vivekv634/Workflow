@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import SettingPNG from '@/public/menu.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ const Page = (props) => {
     const [disable, setDisable] = useState(true);
     const [focus, setFocus] = useState(false);
     const router = useRouter();
+    const inputRef = useRef();
 
     const handlePageRedirect = () => {
         router.push(`/dashboard/pages/${props.pid}`);
@@ -69,14 +70,20 @@ const Page = (props) => {
         }
     }
 
+    useEffect(() => {
+        inputRef.current.select();
+    },[focus])
+
     return (
         <div className='bg-slate-200 p-4 m-3 rounded-xl h-32 flex md:w-2/4 lg:w-1/3 hover:bg-slate-300'>
             <div className='w-11/12 h-full flex flex-col justify-between' title={props.pname}>
-                <input className='text-blue-600 bg-transparent text-3xl font-bold w-full text-ellipsis text-nowrap overflow-hidden'
-                    autoFocus={focus}
+                <input className={`${focus ? 'border-2 border-blue-900 rounded-md':''} text-blue-600 bg-transparent text-3xl font-bold w-full text-ellipsis text-nowrap overflow-hidden`}
+                    autoFocus={true}
                     disabled={disable}
+                    placeholder='Page Name'
+                    ref={inputRef}
                     value={rename}
-                    onKeyUp={(e) => { e.key == "Enter" && handleRenamePage(props.pid), e.key == "Escape" && setDisable(true) }}
+                    onKeyUp={(e) => { e.key == "Enter" && handleRenamePage(props.pid), e.key == "Escape" && (setDisable(true), setFocus(false)) }}
                     onChange={(e) => { setRename(e.target.value) }} />
                 <span className='text-blue-950 text-sm '>{props.timestamp.slice(4, 15)}</span>
             </div>

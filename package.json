@@ -14,6 +14,8 @@
     "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-select": "^5.8.0",
+    "react-tooltip": "^5.25.1",
     "reactflow": "^11.10.1",
     "uid": "^2.0.2"
   },
