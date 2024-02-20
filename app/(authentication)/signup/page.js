@@ -5,7 +5,6 @@ import { auth, db } from '@/config/firebase';
 import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { signIn, useSession } from 'next-auth/react';
 
 const Signup = () => {
@@ -13,25 +12,20 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cpassword, setCPassword] = useState('');
-  const [photoURL, setPhotoURL] = useState('');
-  const [isAuth, setIsAuth] = useState(false);
   const workflow = collection(db, "workflow");
   const router = useRouter();
   const required = true;
-  const { data, status } = useSession();
+  const { status } = useSession();
 
   useEffect(() => {
     if (status === 'authenticated') {
-      setName(data?.user?.name);
-      setEmail(data?.user?.email);
-      setPhotoURL(data?.user?.image);
-      setIsAuth(true);
+      router.push('/dashboard');
     }
-  }, [status, data])
+  }, [router, status])
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) router.push("/");
+      if (user) router.push("/dashboard");
     })
   })
 
@@ -65,7 +59,7 @@ const Signup = () => {
       await addDoc(workflow, userData).then(() => {
         onAuthStateChanged(auth, (user) => {
           if (user) {
-            router.push('/');
+            router.push('/dashboard');
           }
         })
       }).catch(err => console.log(err))
@@ -76,17 +70,15 @@ const Signup = () => {
 
   return (
     <main>
-      {isAuth &&
         <form>
-          <Image src={photoURL} height={40} width={40} alt='profile photo' />
-          <input className='input' type="text" placeholder='Name' value={name} onChange={(e) => (setName(e.target.value))} required={required} />
-          <input className='input' type="email" placeholder='Email Address' value={email} onChange={(e) => (setEmail(e.target.value))} required={required} />
-          <input className='input' type="password" placeholder='New Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} />
-          <input className='input' type="password" placeholder='Confirm New Password' value={cpassword} onChange={(e) => (setCPassword(e.target.value))} required={required} />
-          <input type="submit" value="Submit" onClick={handleFormSubmit} />
-        </form>}
-      {!isAuth && <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={() => signIn('google')}>Sigup with google</button>} <br />
-      {!isAuth && <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={() => signIn('github')}>Sigup with github</button>}
+          <input className='input' type="text" placeholder='Name' value={name} onChange={(e) => (setName(e.target.value))} required={required} /> <br />
+          <input className='input' type="email" placeholder='Email Address' value={email} onChange={(e) => (setEmail(e.target.value))} required={required} /> <br />
+          <input className='input' type="password" placeholder='New Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} /> <br />
+          <input className='input' type="password" placeholder='Confirm New Password' value={cpassword} onChange={(e) => (setCPassword(e.target.value))} required={required} /> <br />
+          <input type="submit" value="Submit" onClick={handleFormSubmit} /><br /> <br />
+        </form>
+      <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={() => signIn('google')}>Sigup with google</button> <br />
+      <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={() => signIn('github')}>Sigup with github</button>
     </main>
   )
 }

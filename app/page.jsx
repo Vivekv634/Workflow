@@ -1,7 +1,7 @@
 "use client"
 import { auth } from "@/config/firebase";
-import { signOut } from "firebase/auth";
-import Link from "next/link";
+import { signOut as SignOut } from "firebase/auth";
+import { signOut } from "next-auth/react";
 import Navbar from "./components/Navbar";
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      <button type="button" onClick={() => handleSignout()}>Sign out</button>
+      <button type="button" onClick={() => { signOut(); SignOut(auth)}}>Sign out</button>
     </main>
   )
 }
