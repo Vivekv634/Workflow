@@ -55,7 +55,7 @@ const Dashboard = () => {
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.push('login');
+        router.push('/login');
       } else {
         const q = query(workflow, where("email", "==", user?.email));
         const response = await getDocs(q);
