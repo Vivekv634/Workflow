@@ -17,18 +17,7 @@ const Dashboard = () => {
   const [id, setId] = useState('');
   const router = useRouter();
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      getDocs(workflow).then((response) => {
-        response.docs.map(item => {
-          if (item.data().email == user.email) {
-            setId(item.id);
-          }
-        })
-      })
-    }
-  })
-  
+  // handling create new page
   const handlePageSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -52,6 +41,7 @@ const Dashboard = () => {
     setLoading(false);
   }
 
+  // getting and setting the pages array and uid on page load
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -61,6 +51,7 @@ const Dashboard = () => {
         const response = await getDocs(q);
         response.forEach((doc) => {
           setPages(doc.data().pages);
+          setId(doc._key.path.segments[doc._key.path.segments.length - 1]);
         })
         setLoading(false)
       }
