@@ -111,7 +111,7 @@ const Signup = () => {
         <input type="submit" value="Submit" onClick={handleFormSubmit} />
         <br /> <br />
       </form>
-      <button type="button" className="p-2 m-1 bg-blue-600 text-white rounded-md" onClick={handleGoogleSignup}>Signup with google</button> 
+      <button type="button" className="p-2 m-1 bg-blue-600 text-white rounded-md" onClick={handleGoogleSignup}>Signup with google</button>
     </main>
   );
 };

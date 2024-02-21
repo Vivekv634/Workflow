@@ -72,12 +72,12 @@ const Page = (props) => {
 
     useEffect(() => {
         inputRef.current.select();
-    },[focus])
+    }, [focus])
 
     return (
         <div className='bg-slate-200 p-4 m-3 rounded-xl h-32 flex md:w-2/4 lg:w-1/3 hover:bg-slate-300'>
             <div className='w-11/12 h-full flex flex-col justify-between' title={props.pname}>
-                <input className={`${focus ? 'border-2 border-blue-900 rounded-md':''} text-blue-600 bg-transparent text-3xl font-bold w-full text-ellipsis text-nowrap overflow-hidden`}
+                <input className={`${focus ? 'border-2 border-blue-900 rounded-md' : ''} text-blue-600 bg-transparent text-3xl font-bold w-full text-ellipsis text-nowrap overflow-hidden`}
                     autoFocus={true}
                     disabled={disable}
                     placeholder='Page Name'
@@ -89,16 +89,12 @@ const Page = (props) => {
             </div>
             <div className='w-1/12 h-full flex items-start justify-end'>
                 <div>
-                    <Image src={SettingPNG} width={20} height={20} alt='project settings' className='cursor-pointer'
-                        onClick={() => setPopup(!popup)} />
+                    <Image src={SettingPNG} width={20} height={20} alt='project settings' className='cursor-pointer' onClick={() => setPopup(!popup)} />
                 </div>
                 <ul className={`absolute ${popup ? 'block' : 'hidden'}  bg-slate-50 p-1 mt-9 w-36 border rounded-lg`}>
-                    <li className='hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' 
-                    onClick={() => handlePageRedirect()}>Open Page</li>
-                    <li className='hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' 
-                    onClick={() => { setDisable(false), setPopup(!popup), setFocus(true) }}>Rename</li>
-                    <li className='text-red-600 hover:bg-slate-100 p-[4px] rounded-md cursor-pointer'
-                        onClick={() => { handleDeletePage(props.pid) }}>Delete</li>
+                    <li className='hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' onClick={() => handlePageRedirect()}>Open Page</li>
+                    <li className='hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' onClick={() => { setDisable(false), setPopup(!popup), setFocus(true) }}>Rename</li>
+                    <li className='text-red-600 hover:bg-slate-100 p-[4px] rounded-md cursor-pointer' onClick={() => { handleDeletePage(props.pid) }}>Delete</li>
                 </ul>
             </div>
         </div>

@@ -17,22 +17,22 @@ const nodeTypeList = [
     {
         "label": "Default Node",
         "value": "default",
-        "className":""
+        "className": ""
     },
     {
         "label": "Input Node",
         "value": "input",
-        "className":""
+        "className": ""
     },
     {
         "label": "Output Node",
         "value": "output",
-        "className":""
+        "className": ""
     },
     {
         "label": "Annotation",
         "value": "annotation",
-        "className":"annotation"
+        "className": "annotation"
     }
 ];
 
@@ -78,7 +78,7 @@ const Flow = ({ params }) => {
             id: `${nodes?.length + 1}`,
             data: { label: `${nodeName}` },
             type: nodeSelect,
-            className: (nodeTypeList.find(nodeType => { 
+            className: (nodeTypeList.find(nodeType => {
                 if (nodeType.value == nodeSelect) {
                     return nodeType.className;
                 }
@@ -91,7 +91,7 @@ const Flow = ({ params }) => {
         setNodeName('');
         setNodeSelect(nodeTypeList[0].value);
     }, [nodes, nodeName, nodeSelect]);
-    
+
     useEffect(() => {
         const getData = async () => {
             onAuthStateChanged(auth, async (user) => {
@@ -185,7 +185,7 @@ const Flow = ({ params }) => {
                     <section className='bg-blue-100 p-1 w-11/12 rounded-lg flex justify-center'>
                         <ul className='flex grow md:grow-0 justify-evenly'>
                             <li data-tooltip-id="tooltip" data-tooltip-content="Input Node" className='pageBottomButtonCSS'><Image src={AddIcon} alt='add node' /></li>
-                            <li data-tooltip-id="tooltip" data-tooltip-content="Add Node" className='pageBottomButtonCSS' onClick={()=>{setAddNodePopup(!addNodePopup)}}><Image src={AddIcon} alt='add node' /></li>
+                            <li data-tooltip-id="tooltip" data-tooltip-content="Add Node" className='pageBottomButtonCSS' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={AddIcon} alt='add node' /></li>
                             <li data-tooltip-id="tooltip" data-tooltip-content="Simple Node" className='pageBottomButtonCSS'><Image src={AddIcon} alt='add node' /></li>
                             <Tooltip id="tooltip" />
                         </ul>
@@ -204,7 +204,7 @@ const Flow = ({ params }) => {
                         <div className={`bg-green-200 p-3 rounded-lg ${addNodePopup && "shadow-2xl"}`}>
                             <header className='flex justify-between w-full items-center'>
                                 <p className="font-semibold text-xl">Add Node</p>
-                                <button type="button" className='bg-green-400 rounded-md' onClick={()=>{setAddNodePopup(!addNodePopup)}}><Image src={CloseIcon} alt='close add node section'/></button>
+                                <button type="button" className='bg-green-400 rounded-md' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={CloseIcon} alt='close add node section' /></button>
                             </header>
                             <form onSubmit={e => e.preventDefault()}>
                                 <input type="text" placeholder='Enter Node Name' className='input block' value={nodeName} onChange={e => setNodeName(e.target.value)} required={true} />
@@ -212,7 +212,7 @@ const Flow = ({ params }) => {
                                 <button type="submit" className='p-1 bg-blue-200 w-full mt-2 rounded-sm' onClick={handleAddNode}>Add</button>
                             </form>
                         </div>
-                </section>
+                    </section>
                 </ReactFlow>
             </div>
         </ReactFlowProvider>
