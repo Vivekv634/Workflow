@@ -1,10 +1,8 @@
 "use client";
-import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { auth } from '@/config/firebase';
 import { useRouter } from 'next/navigation';
-
-const googleProvider = new GoogleAuthProvider();
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,19 +19,14 @@ const Login = () => {
     })
   })
 
-  // handling email and password signedin
+  // handling email and password signin
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password).catch(err => alert(err.message));
     } catch (error) {
       console.log(error.message);
     }
-  }
-
-  // handling google signin
-  const handleGoogleSignin = async () => {
-    await signInWithPopup(auth, googleProvider);
   }
 
   return (
@@ -43,7 +36,6 @@ const Login = () => {
         <input className='input' type="password" placeholder='Password' value={password} onChange={(e) => (setPassword(e.target.value))} required={required} /> <br />
         <input type="submit" value="Submit" onClick={handleSubmit} /><br />
       </form>
-      <button type="button" className='p-2 m-1 bg-blue-600 text-white rounded-md' onClick={handleGoogleSignin}>SignIn with google</button> <br />
     </main>
   )
 }

@@ -6,7 +6,29 @@
     .input {
         @apply p-2 my-2 rounded-md outline-none border;
     }
-    .pageBottomButtonCSS{
+
+    .pageBottomButtonCSS {
         @apply p-2 w-full flex justify-center hover:bg-blue-400 transition rounded-md cursor-pointer;
     }
+}
+
+.react-flow__node.annotation {
+    border: 1px solid black;
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    max-width: 15rem;
+    min-width: 4rem;
+}
+
+.react-flow__node.annotation header {
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    text-align: center;
+    border-bottom-width: 1px;
+    border-bottom-color: lightgrey;
+}
+
+.react-flow__node.annotation .react-flow__handle {
+    display: none;
 }

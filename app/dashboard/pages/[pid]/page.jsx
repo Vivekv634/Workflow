@@ -8,41 +8,42 @@ import CloseIcon from '@/public/close.svg';
 import AddIcon from '@/public/add.svg';
 import { Tooltip } from 'react-tooltip'
 import React, { useState, useCallback, useEffect } from 'react';
-import ReactFlow, { Background, applyNodeChanges, applyEdgeChanges, addEdge, Panel, ReactFlowProvider } from 'reactflow';
-import 'reactflow/dist/style.css';
+import ReactFlow, { Background, applyNodeChanges, applyEdgeChanges, addEdge, Panel, ReactFlowProvider, Controls } from 'reactflow';
+import "reactflow/dist/style.css";
 import 'react-tooltip/dist/react-tooltip.css'
 import Select from 'react-select';
+import { flowContext } from '@/Context/flowContext';
+import { uid } from 'uid';
 
 const nodeTypeList = [
     {
         "label": "Default Node",
         "value": "default",
-        "className": ""
+        "className": "default"
     },
     {
         "label": "Input Node",
         "value": "input",
-        "className": ""
+        "className": "input"
     },
     {
         "label": "Output Node",
         "value": "output",
-        "className": ""
+        "className": "output"
     },
     {
         "label": "Annotation",
-        "value": "annotation",
+        "value": "default",
         "className": "annotation"
     }
 ];
 
-
 const Flow = ({ params }) => {
-    // window.onbeforeunload = function () {
-    //     return "Data will be lost if you leave the page, are you sure?";
-    // };
-    let [nodes, setNodes] = useState([]);
-    let [edges, setEdges] = useState([]);
+    window.onbeforeunload = function () {
+        return "Data will be lost if you leave the page, are you sure?";
+    };
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
     const [pages, setPages] = useState([]);
     const [pageID, setPageID] = useState('');
     const [userId, setUserId] = useState('');
@@ -56,41 +57,39 @@ const Flow = ({ params }) => {
 
     useEffect(() => {
         setNodes(nodes)
-    }, [nodes])
+    }, [nodes, setNodes])
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [],
+        [setNodes],
     );
 
     const onEdgesChange = useCallback(
         (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [],
+        [setEdges],
     );
 
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
-        [],
+        [setEdges],
     );
 
     const handleAddNode = useCallback(() => {
         let newNode = {
-            id: `${nodes?.length + 1}`,
-            data: { label: `${nodeName}` },
-            type: nodeSelect,
-            className: (nodeTypeList.find(nodeType => {
-                if (nodeType.value == nodeSelect) {
-                    return nodeType.className;
-                }
-            })),
+            id: `${uid(12)}`,
+            data: {
+                label: nodeName
+            },
+            type: nodeSelect?.value,
+            className: nodeSelect?.className,
             position: { x: 0, y: 0 + (nodes.length + 1) * 50 }
         };
         setNodes((nds) => nds.concat(newNode));
         setIsSaved(false);
         setAddNodePopup(false);
         setNodeName('');
-        setNodeSelect(nodeTypeList[0].value);
-    }, [nodes, nodeName, nodeSelect]);
+        setNodeSelect('');
+    }, [nodes, setNodes, nodeName, nodeSelect]);
 
     useEffect(() => {
         const getData = async () => {
@@ -114,7 +113,7 @@ const Flow = ({ params }) => {
             })
         }
         getData();
-    }, [params])
+    }, [params, setNodes, setEdges])
 
     const showDetails = () => {
         console.log(nodes);
@@ -157,64 +156,46 @@ const Flow = ({ params }) => {
         });
     }
 
-    const addNote = useCallback(() => {
-        let newNode = {
-            id: `${nodes?.length + 1}`,
-            className: 'annotation',
-            data: {
-                label: (<>On the bottom left you see the <strong>Controls</strong> and the bottom right the{' '}
-                    <strong>MiniMap</strong>. This is also just a node 🥳</>)
-            },
-            type: 'default',
-            position: { x: 0, y: 0 + (nodes.length + 1) * 50 }
-        };
-        setNodes((nds) => nds.concat(newNode));
-        setIsSaved(false);
-    }, [nodes])
-
     return (
         <ReactFlowProvider>
-            <div className='h-screen w-screen'>
-                {/* <Panel position='top-center'>
-                    <section className='-ml-4 -mt-4 bg-blue-100 p-2 rounded-b-md'>
-                        <span className='font-bold text-xl px-1'>{pageName}</span>
-                        <span className='underline'>{isSaved ? "Saved" : "Not saved"}</span>
-                    </section>
-                </Panel> */}
-                <Panel position='bottom-center' className='sm:flex sm:justify-center w-screen md:w-auto'>
-                    <section className='bg-blue-100 p-1 w-11/12 rounded-lg flex justify-center'>
-                        <ul className='flex grow md:grow-0 justify-evenly'>
-                            <li data-tooltip-id="tooltip" data-tooltip-content="Input Node" className='pageBottomButtonCSS'><Image src={AddIcon} alt='add node' /></li>
-                            <li data-tooltip-id="tooltip" data-tooltip-content="Add Node" className='pageBottomButtonCSS' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={AddIcon} alt='add node' /></li>
-                            <li data-tooltip-id="tooltip" data-tooltip-content="Simple Node" className='pageBottomButtonCSS'><Image src={AddIcon} alt='add node' /></li>
-                            <Tooltip id="tooltip" />
-                        </ul>
-                    </section>
-                </Panel>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    onConnect={onConnect}
-                    onNodeClick={(e) => { setNodeId(e.target.dataset.id), setEditName(e.target.innerText) }}
-                    fitView >
-                    <Background />
-                    <section className={`absolute ${addNodePopup ? "block" : "hidden"} w-screen h-screen z-10 flex justify-center items-center`} >
-                        <div className={`bg-green-200 p-3 rounded-lg ${addNodePopup && "shadow-2xl"}`}>
-                            <header className='flex justify-between w-full items-center'>
-                                <p className="font-semibold text-xl">Add Node</p>
-                                <button type="button" className='bg-green-400 rounded-md' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={CloseIcon} alt='close add node section' /></button>
-                            </header>
-                            <form onSubmit={e => e.preventDefault()}>
-                                <input type="text" placeholder='Enter Node Name' className='input block' value={nodeName} onChange={e => setNodeName(e.target.value)} required={true} />
-                                <Select options={nodeTypeList} onChange={setNodeSelect} defaultValue={nodeSelect} required={true} />
-                                <button type="submit" className='p-1 bg-blue-200 w-full mt-2 rounded-sm' onClick={handleAddNode}>Add</button>
-                            </form>
-                        </div>
-                    </section>
-                </ReactFlow>
-            </div>
+            <flowContext.Provider value={{ nodes, setNodes, edges, setEdges }}>
+                <div className='h-screen w-screen'>
+                    <Panel position='bottom-center' className='sm:flex sm:justify-center w-screen md:w-auto'>
+                        <section className='bg-blue-100 p-1 w-11/12 rounded-lg flex justify-center'>
+                            <ul className='flex grow md:grow-0 justify-evenly'>
+                                <li data-tooltip-id="tooltip" data-tooltip-content="Input Node" className='pageBottomButtonCSS'><Image src={AddIcon} alt='add node' /></li>
+                                <li data-tooltip-id="tooltip" data-tooltip-content="Add Node" className='pageBottomButtonCSS' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={AddIcon} alt='add node' /></li>
+                                <li data-tooltip-id="tooltip" data-tooltip-content="Simple Node" className='pageBottomButtonCSS' onClick={() => showDetails()}><Image src={AddIcon} alt='add node' /></li>
+                                <Tooltip id="tooltip" />
+                            </ul>
+                        </section>
+                    </Panel>
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onConnect={onConnect}
+                        onNodeClick={(e) => { setNodeId(e.target.dataset.id), setEditName(e.target.innerText), console.log(e.target.dataset.id) }}
+                        fitView >
+                        <Background />
+                        <Controls />
+                        <section className={`absolute ${addNodePopup ? "block" : "hidden"} w-screen h-screen z-10 flex justify-center items-center`} >
+                            <div className={`bg-green-200 p-3 rounded-lg ${addNodePopup && "shadow-2xl"}`}>
+                                <header className='flex justify-between w-full items-center'>
+                                    <p className="font-semibold text-xl">Add Node</p>
+                                    <button type="button" className='bg-green-400 rounded-md' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={CloseIcon} alt='close add node section' /></button>
+                                </header>
+                                <form onSubmit={e => e.preventDefault()}>
+                                    <input type="text" placeholder='Enter Node Name' className='input block' value={nodeName} onChange={e => setNodeName(e.target.value)} required={true} />
+                                    <Select options={nodeTypeList} onChange={setNodeSelect} defaultValue={nodeSelect} value={nodeTypeList.find(nodeType => nodeType.value === nodeSelect)} required={true} />
+                                    <button type="submit" className='p-1 bg-blue-200 w-full mt-2 rounded-sm' onClick={handleAddNode}>Add</button>
+                                </form>
+                            </div>
+                        </section>
+                    </ReactFlow>
+                </div>
+            </flowContext.Provider>
         </ReactFlowProvider>
     )
 }

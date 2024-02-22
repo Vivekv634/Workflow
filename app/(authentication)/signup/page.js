@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { uid } from "uid";
 import { auth, db } from "@/config/firebase";
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
-const googleProvider = new GoogleAuthProvider();
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -64,38 +63,6 @@ const Signup = () => {
     }
   };
 
-  // handling google signup
-  const handleGoogleSignup = async () => {
-    try {
-      const { user } = await signInWithPopup(auth, googleProvider);
-      const userData = {
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        pages: [
-          {
-            pid: uid(20),
-            pname: "Project 1",
-            timestamp: Date(),
-            update_timestamp: Date(),
-            nodes: [],
-            edges: [],
-          },
-        ],
-      };
-      await addDoc(workflow, userData)
-        .then(() => {
-          onAuthStateChanged(auth, (user) => {
-            if (user) {
-              router.push("/dashboard");
-            }
-          });
-        })
-        .catch((err) => console.log(err));
-    } catch (err) {
-      alert(err.message);
-    }
-  };
 
   return (
     <main>
@@ -111,7 +78,6 @@ const Signup = () => {
         <input type="submit" value="Submit" onClick={handleFormSubmit} />
         <br /> <br />
       </form>
-      <button type="button" className="p-2 m-1 bg-blue-600 text-white rounded-md" onClick={handleGoogleSignup}>Signup with google</button>
     </main>
   );
 };
