@@ -11,8 +11,15 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "lh3.googleusercontent.com",
                 pathname: "**"
+            },
+            {
+                protocol: "https",
+                hostname: "source.boringavatars.com",
+                pathname: "**"
             }
-        ]
+        ],
+        dangerouslyAllowSVG: true,
+        domains: ["rb.gy"]
     }
 }
 

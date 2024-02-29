@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import SettingPNG from '@/public/menu.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -10,16 +10,13 @@ const Page = (props) => {
     const [popup, setPopup] = useState(false);
     const [id, setId] = useState('');
     let [pages, setPages] = useState([]);
-    const [rename, setRename] = useState(props.pname);
-    const [disable, setDisable] = useState(true);
-    const [focus, setFocus] = useState(false);
     const router = useRouter();
-    const inputRef = useRef();
 
     const handlePageRedirect = () => {
         router.push(`/dashboard/pages/${props.pid}`);
     }
 
+    // getting and setting signedin user's id and pages
     onAuthStateChanged(auth, (user) => {
         if (user) {
             getDocs(workflow).then((response) => {
@@ -33,6 +30,7 @@ const Page = (props) => {
         }
     })
 
+    // page rename handling function
     const handleRenamePage = async (pid) => {
         const docRef = doc(db, "workflow", id);
         let updatedPages = pages.map(page => {
@@ -51,6 +49,7 @@ const Page = (props) => {
         setDisable(true);
     }
 
+    // page delete handling function
     const handleDeletePage = async (pid) => {
         const response = confirm(`Really wanted to delete ${props.pname}?`);
         try {
@@ -70,21 +69,10 @@ const Page = (props) => {
         }
     }
 
-    useEffect(() => {
-        inputRef.current.select();
-    }, [focus])
-
     return (
-        <div className='bg-slate-200 p-4 m-3 rounded-xl h-32 flex md:w-2/4 lg:w-1/3 hover:bg-slate-300'>
+        <div className='bg-gray-200 p-4 m-3 rounded-xl h-32 w-screen flex transition-all md:w-64 hover:bg-gray-300'>
             <div className='w-11/12 h-full flex flex-col justify-between' title={props.pname}>
-                <input className={`${focus ? 'border-2 border-blue-900 rounded-md' : ''} text-blue-600 bg-transparent text-3xl font-bold w-full text-ellipsis text-nowrap overflow-hidden`}
-                    autoFocus={true}
-                    disabled={disable}
-                    placeholder='Page Name'
-                    ref={inputRef}
-                    value={rename}
-                    onKeyUp={(e) => { e.key == "Enter" && handleRenamePage(props.pid), e.key == "Escape" && (setDisable(true), setFocus(false)) }}
-                    onChange={(e) => { setRename(e.target.value) }} />
+                <span className='text-black bg-transparent text-3xl font-bold w-full text-ellipsis text-nowrap overflow-hidden'>{props.pname}</span>
                 <span className='text-blue-950 text-sm '>{props.timestamp.slice(4, 15)}</span>
             </div>
             <div className='w-1/12 h-full flex items-start justify-end'>

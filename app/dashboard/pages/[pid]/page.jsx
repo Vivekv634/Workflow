@@ -6,9 +6,10 @@ import { doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import Image from 'next/image';
 import CloseIcon from '@/public/close.svg';
 import AddIcon from '@/public/add.svg';
+import SaveIcon from '@/public/save.png';
 import { Tooltip } from 'react-tooltip'
 import React, { useState, useCallback, useEffect } from 'react';
-import ReactFlow, { Background, applyNodeChanges, applyEdgeChanges, addEdge, Panel, ReactFlowProvider, Controls } from 'reactflow';
+import ReactFlow, { Background, addEdge, Panel, ReactFlowProvider, useNodesState, useEdgesState } from 'reactflow';
 import "reactflow/dist/style.css";
 import 'react-tooltip/dist/react-tooltip.css'
 import Select from 'react-select';
@@ -42,8 +43,8 @@ const Flow = ({ params }) => {
     window.onbeforeunload = function () {
         return "Data will be lost if you leave the page, are you sure?";
     };
-    const [nodes, setNodes] = useState([]);
-    const [edges, setEdges] = useState([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [pages, setPages] = useState([]);
     const [pageID, setPageID] = useState('');
     const [userId, setUserId] = useState('');
@@ -59,20 +60,14 @@ const Flow = ({ params }) => {
         setNodes(nodes)
     }, [nodes, setNodes])
 
-    const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [setNodes],
-    );
-
-    const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [setEdges],
-    );
-
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
         [setEdges],
     );
+
+    const connectedNodes = () => {
+        console.log(ReactFlow.getConnectedNodes({ nodes, edges }, nodeId));
+    }
 
     const handleAddNode = useCallback(() => {
         let newNode = {
@@ -163,9 +158,9 @@ const Flow = ({ params }) => {
                     <Panel position='bottom-center' className='sm:flex sm:justify-center w-screen md:w-auto'>
                         <section className='bg-blue-100 p-1 w-11/12 rounded-lg flex justify-center'>
                             <ul className='flex grow md:grow-0 justify-evenly'>
-                                <li data-tooltip-id="tooltip" data-tooltip-content="Input Node" className='pageBottomButtonCSS'><Image src={AddIcon} alt='add node' /></li>
+                                <li data-tooltip-id="tooltip" data-tooltip-content="Input Node" className='pageBottomButtonCSS' onClick={() => connectedNodes()}><Image src={AddIcon} alt='add node' /></li>
                                 <li data-tooltip-id="tooltip" data-tooltip-content="Add Node" className='pageBottomButtonCSS' onClick={() => { setAddNodePopup(!addNodePopup) }}><Image src={AddIcon} alt='add node' /></li>
-                                <li data-tooltip-id="tooltip" data-tooltip-content="Simple Node" className='pageBottomButtonCSS' onClick={() => showDetails()}><Image src={AddIcon} alt='add node' /></li>
+                                <li data-tooltip-id="tooltip" data-tooltip-content="Save Changes" className='pageBottomButtonCSS' onClick={() => saveChanges()}><Image src={SaveIcon} alt='add node' /></li>
                                 <Tooltip id="tooltip" />
                             </ul>
                         </section>
@@ -179,8 +174,7 @@ const Flow = ({ params }) => {
                         onNodeClick={(e) => { setNodeId(e.target.dataset.id), setEditName(e.target.innerText), console.log(e.target.dataset.id) }}
                         fitView >
                         <Background />
-                        <Controls />
-                        <section className={`absolute ${addNodePopup ? "block" : "hidden"} w-screen h-screen z-10 flex justify-center items-center`} >
+                        <section onClick={() => setAddNodePopup(!addNodePopup)} className={`absolute ${addNodePopup ? "block" : "hidden"} w-screen h-screen z-10 flex justify-center items-center`} >
                             <div className={`bg-green-200 p-3 rounded-lg ${addNodePopup && "shadow-2xl"}`}>
                                 <header className='flex justify-between w-full items-center'>
                                     <p className="font-semibold text-xl">Add Node</p>
